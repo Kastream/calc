@@ -1,19 +1,70 @@
 let li = ''
 function display(nli) {
+    
     document.querySelector('#inp').value = nli.split('**').join('^') + '= ';
+    let res = nli;
     if (nli.slice(-1) == ' ') {
         if (nli.slice(-2) == '= ') {
             li = String(eval(nli.slice(0, -3)));
             display(li);
             return false;
         }
-        document.querySelector('#result').innerHTML = eval(nli + '0');
+        display(res + '0');
         return false;
     }
-    document.querySelector('#result').innerHTML = eval(nli);
-    return false;
+    if (evener(res)) {
+        
+        document.querySelector('#result').innerHTML = eval(res);
+        return false;
+    }
 }
-
+function evener (nli) {
+    let counter = 0;
+    for (let i = 0; i < nli.length; i ++) {
+        if (nli[i] == '(') {
+            counter ++;
+        } else if (nli[i] == ')') {
+            counter --;
+        }}
+    if (counter == 0) {
+        return true;
+    } else {
+        let ind = (nli.lastIndexOf('('))
+        for (ind; ind < nli.length; ind ++) {
+            console.log('herebere');
+            if (/^\d+$/.test(nli[ind])) {
+                console.log('donecheck')
+                for (let i = 0; i < counter; i ++) {
+                    nli = nli + ')';
+                }
+                display(nli);
+                return false;
+            }
+            
+        }
+        nli = nli + '0'
+        for (let i = 0; i < counter; i ++) {
+            nli = nli + ')';
+        }
+        display(nli);
+    }}
+function checker(nli) {
+    let counter = 0;
+    for (let i =0; i < nli.length; i ++) {
+        if (nli[i] == '(') {
+            counter ++;
+        } else if (nli[i] == ')') {
+            counter --;
+        }
+        if (counter < 0) {
+            return false;
+        }
+    if (counter != 0) {
+        return false;
+    }
+    return true;
+    }
+}
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('button').forEach(button => {
         button.onclick = function() {
@@ -78,6 +129,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 li += ` ${button.innerHTML} `;
                 display(li);
+                return false;
+            } else if (button.id == 'cl') {
+                if (checker(li)) {
+                li += ')';
+                display(li);
+                }
                 return false;
             } else {
                 if (li.slice(-2) == '= ') {
