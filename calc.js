@@ -1,6 +1,8 @@
 let li = ''
-function display(nli) {
-    
+function shower(nli) {
+    document.querySelector('#result').innerHTML = eval(nli)
+}
+function display(nli) {    
     document.querySelector('#inp').value = nli.split('**').join('^') + '= ';
     let res = nli;
     if (nli.slice(-1) == ' ') {
@@ -9,7 +11,11 @@ function display(nli) {
             display(li);
             return false;
         }
-        display(res + '0');
+        if (checker1(nli)) {
+            shower(res + '0');
+            return false;
+        }
+        evener(res);
         return false;
     }
     if (evener(res)) {
@@ -17,6 +23,19 @@ function display(nli) {
         document.querySelector('#result').innerHTML = eval(res);
         return false;
     }
+}
+function checker1 (nli) {
+    let counter = 0;
+    for (let i =0; i < nli.length; i ++) {
+        if (nli[i] == '(') {
+            counter ++;
+        } else if (nli[i] == ')') {
+            counter --;
+    }}
+    if (counter != 0) {
+        return false;
+    }
+    return true;
 }
 function evener (nli) {
     let counter = 0;
@@ -29,42 +48,44 @@ function evener (nli) {
     if (counter == 0) {
         return true;
     } else {
-        let ind = (nli.lastIndexOf('('))
-        for (ind; ind < nli.length; ind ++) {
-            console.log('herebere');
+        if (isNaN(nli.slice(-2))) {
+            nli += '0';
+        }
+        for (let ind = (nli.lastIndexOf('(')); ind < nli.length; ind ++) {
+            console.log(nli[ind]);
             if (/^\d+$/.test(nli[ind])) {
-                console.log('donecheck')
+                console.log('las is dig')
                 for (let i = 0; i < counter; i ++) {
                     nli = nli + ')';
                 }
-                display(nli);
+                console.log(nli)
+                shower(nli);
                 return false;
             }
             
         }
+        console.log('las no dig')
         nli = nli + '0'
         for (let i = 0; i < counter; i ++) {
             nli = nli + ')';
         }
-        display(nli);
+        shower(nli);
     }}
 function checker(nli) {
-    let counter = 0;
+    let counter = -1;
     for (let i =0; i < nli.length; i ++) {
+        console.log(nli[i]);
         if (nli[i] == '(') {
             counter ++;
         } else if (nli[i] == ')') {
             counter --;
-        }
-        if (counter < 0) {
-            return false;
-        }
+    }}
     if (counter != 0) {
         return false;
     }
     return true;
-    }
 }
+
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('button').forEach(button => {
         button.onclick = function() {
@@ -132,11 +153,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 return false;
             } else if (button.id == 'cl') {
                 if (checker(li)) {
-                li += ')';
-                display(li);
+                    li += ')';
+                    display(li);
                 }
                 return false;
-            } else {
+            } else if (button.id == 'op') {
+                if (li == '') {
+                    li += '('
+                    display(li);
+                    return false;
+                }
+                if (!isNaN(li.slice(-2))) {
+                    li += ' * (';
+                } else {
+                    li += '(';
+                }
+                display(li);
+                return false;
+
+            }else {
                 if (li.slice(-2) == '= ') {
                     li = ' ';
                     document.querySelector('#result').innerHTML = 0;
