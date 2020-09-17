@@ -1,7 +1,6 @@
 let symbs = ['* ', '**', '- ', '+ ', '/ '];
 let li = '';
 function shower(nli) {
-    console.log(nli);
     document.querySelector('#result').innerHTML = eval(nli)
 }
 function display(nli) {    
@@ -171,7 +170,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     return false;
                 }
                 if (!isNaN(li.slice(-2)) || !isNaN(li.slice(-1))) {
-                    console.log('before checking slice in symbs', li.slice(-2));
                     if (symbs.includes(li.slice(-2))) {
                         li += '(';
                     } else {
