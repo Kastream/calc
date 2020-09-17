@@ -1,5 +1,7 @@
-let li = ''
+let symbs = ['* ', '**', '- ', '+ ', '/ '];
+let li = '';
 function shower(nli) {
+    console.log(nli);
     document.querySelector('#result').innerHTML = eval(nli)
 }
 function display(nli) {    
@@ -17,6 +19,9 @@ function display(nli) {
         }
         evener(res);
         return false;
+    }
+    if (nli.slice(-1) == ' ') {
+        evener(res);
     }
     if (evener(res)) {
         
@@ -48,23 +53,26 @@ function evener (nli) {
     if (counter == 0) {
         return true;
     } else {
-        if (isNaN(nli.slice(-2))) {
+        if (nli.slice(-1) != ')' && isNaN(nli.slice(-1)) || nli.slice(-1) == ' ') {
             nli += '0';
         }
         for (let ind = (nli.lastIndexOf('(')); ind < nli.length; ind ++) {
-            console.log(nli[ind]);
             if (/^\d+$/.test(nli[ind])) {
-                console.log('las is dig')
                 for (let i = 0; i < counter; i ++) {
                     nli = nli + ')';
                 }
-                console.log(nli)
                 shower(nli);
                 return false;
             }
             
         }
-        console.log('las no dig')
+        if (nli.slice(-1) == ')') {
+            for (let i = 0; i < counter; i ++) {
+                nli = nli + ')';
+            }
+            shower(nli);
+            return false;
+        }
         nli = nli + '0'
         for (let i = 0; i < counter; i ++) {
             nli = nli + ')';
@@ -74,13 +82,12 @@ function evener (nli) {
 function checker(nli) {
     let counter = -1;
     for (let i =0; i < nli.length; i ++) {
-        console.log(nli[i]);
         if (nli[i] == '(') {
             counter ++;
         } else if (nli[i] == ')') {
             counter --;
     }}
-    if (counter != 0) {
+    if (counter < 0) {
         return false;
     }
     return true;
@@ -163,9 +170,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     display(li);
                     return false;
                 }
-                if (!isNaN(li.slice(-2))) {
+                if (!isNaN(li.slice(-2)) || !isNaN(li.slice(-1))) {
+                    console.log('before checking slice in symbs', li.slice(-2));
+                    if (symbs.includes(li.slice(-2))) {
+                        li += '(';
+                    } else {
                     li += ' * (';
-                } else {
+                }} else {
                     li += '(';
                 }
                 display(li);
@@ -180,157 +191,5 @@ document.addEventListener('DOMContentLoaded', () => {
                 display(li);
                 return false;
             }
-            
-            
-            
-            
-            
- 
-            
-            /*if (button.id == 'dC') {
-                document.querySelector('#inp').value = 0;
-                document.querySelector('#result').innerHTML = 0;
-                x = 0
-                return false;
-            };
-            if (button.id == 'dCE') {
-                let inp = document.querySelector('#inp').value;
-                if (inp != 0) {
-                    document.querySelector('#inp').value = inp.substring(0, inp.length-1);
-                    document.querySelector('#result').innerHTML = document.querySelector('#result').innerHTML.substring(0, document.querySelector('#result').innerHTML.length-1);
-                }
-                return false;
-            }
-            if (x == 0) {
-                li = button.innerHTML;
-                x = eval(li);
-                console.log(x)
-                document.querySelector('#inp').value = x;
-                document.querySelector('#result').innerHTML = x;
-            } else if (button.id == 'dxy' || button.id == 'dplus' || button.id == 'dminus' ||
-            button.id == 'dmult' || button.id == 'ddiv' || button.id == 'deq' ||
-            button.id == 'ddeg' || button.id == 'dsqrt') {
-                if (button.id == 'deq') {
-                    if (document.querySelector('#inp').value) {
-                        eq = document.querySelector('#inp').value;
-                    }
-                    x = eval(li + d + eq);
-                    li = x;
-                    console.log(li);
-                    console.log(d);
-                    console.log(eq);
-                    document.querySelector('#result').innerHTML = x;
-                    return false;
-                } else if (button.id == 'ddeg') {
-                    document.querySelector('#inp').value **= 2;
-                    li = li.split(' ');
-                    li.pop();
-                    li.push(document.querySelector('#inp').value);
-                    li = li.join(' ')
-                    console.log(li)
-                    x = eval(li);
-                    document.querySelector('#result').innerHTML = x;
-                    return false;
-                } else if (button.id == 'dsqrt') {
-                    console.log('here')
-                    document.querySelector('#inp').value = (document.querySelector('#inp').value**0.5).toFixed(6);
-                    li = li.split(' ');
-                    li.pop();
-                    li.push(document.querySelector('#inp').value);
-                    li = li.join(' ')
-                    console.log(li)
-                    x = eval(li).toFixed(6);
-                    document.querySelector('#result').innerHTML = x;
-                    return false;
-                }
-                
-                d = button.innerHTML;
-                li = x + ` ${button.innerHTML} `;
-                document.querySelector('#inp').value = 0;
-                document.querySelector('#result').innerHTML = li;
-                console.log(li)
-            } else {
-                if (document.querySelector('#inp').value == 0) {
-                    document.querySelector('#inp').value = button.innerHTML;
-                } else {
-                    document.querySelector('#inp').value += button.innerHTML;
-                }
-                li += button.innerHTML
-                x = eval(li);
-                console.log(li)
-                document.querySelector('#result').innerHTML = x;
-                
-            } 
-            return false; */
-            /*if (button.id == 'dxy' || button.id == 'dplus' || button.id == 'dminus' ||
-            button.id == 'dmult' || button.id == 'ddiv' || button.id == 'deq' ||
-            button.id == 'ddeg' || button.id == 'dsqrt') {
 
-                if (symb == '') {
-                    mat.push(document.querySelector('#inp').value);
-                    symb = button.innerHTML;
-                    document.querySelector('#inp').value = 0;
-                    console.log(symb);
-                    document.querySelector('#result').innerHTML += ` ${button.innerHTML} `;
-                    return false;
-                } else if (symb == '+') {
-                    if (button.id == 'ddeg') {
-                        document.querySelector('#inp').value **= 2;
-                        document.querySelector('#result').innerHTML += `^2`;
-                        return false;
-                    } else if (button.id == 'dsqrt') {
-                        document.querySelector('#inp').value **= 0.5;
-                        document.querySelector('#result').innerHTML += `^0.5`;
-                        return false;
-                    } else if (button)
-                    mat[0] = parseFloat(mat[0]) + parseFloat(document.querySelector('#inp').value);
-                    if (button.id == 'deq') {
-                        symb = '';
-                        document.querySelector('#result').innerHTML += ` = ${mat[0]}`;
-                        return false;
-                    } else {
-                        symb = button.innerHTML;
-                        document.querySelector('#result').innerHTML += ` = ${mat[0]} ${symb}`;
-                    }
-                    document.querySelector('#inp').value = 0;
-                }
-                
-                return false;
-            }
-            */
-            
-            /*if (document.querySelector('#inp').value != 0) {
-                document.querySelector('#inp').value += button.innerHTML;
-                document.querySelector('#result').innerHTML += button.innerHTML;
-                return false;
-            } else if (document.querySelector('#inp').value == 0) {
-                document.querySelector('#inp').value = button.innerHTML;
-                if (document.querySelector('#result').innerHTML == 0) {
-                    document.querySelector('#result').innerHTML = button.innerHTML;
-                } else {
-                    document.querySelector('#result').innerHTML += button.innerHTML;
-                }}
-            return false;*/
-        }
-    });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-});
+}})})
